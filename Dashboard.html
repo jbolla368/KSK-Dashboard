@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KSK Trade Dashboard</title>
+    <style>
+        :root {
+            --color-bg-primary: #475569;
+            --color-bg-secondary: #334155;
+            --color-bg-card: #1e293b;
+            --color-text-primary: #f1f5f9;
+            --color-text-secondary: #cbd5e1;
+            --color-accent: #F4B400;
+            --color-success: #1E4D3A;
+            --color-warning: #f59e0b;
+            --color-danger: #ef4444;
+            --color-border: rgba(148, 163, 184, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--color-bg-primary);
+            color: var(--color-text-primary);
+            padding: 28px;
+            line-height: 1.6;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: #2A3446;
+            padding: 28px 32px;
+            border-radius: 14px;
+            margin-bottom: 28px;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #F4B400;
+        }
+
+        .header p {
+            color: rgba(255,255,255,0.65);
+            font-size: 15px;
+            letter-spacing: 0.3px;
+        }
+
+        .filters {
+            background: #2A3446;
+            padding: 24px;
+            border-radius: 14px;
+            margin-bottom: 28px;
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: rgba(255,255,255,0.7);
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            width: 100%;
+            height: 46px;
+            padding: 0 14px;
+            background: #1F2937;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px;
+            color: var(--color-text-primary);
+            font-size: 14px;
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: #F4B400;
+            box-shadow: 0 0 0 3px rgba(244,180,0,0.1);
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 28px;
+        }
+
+        .kpi-card {
+            background: #2A3446;
+            padding: 24px;
+            border-radius: 16px;
+            border: none;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+        }
+
+        .kpi-label {
+            font-size: 12px;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+
+        .kpi-value {
+            font-size: 34px;
+            font-weight: 700;
+            color: #F4B400;
+            margin-bottom: 6px;
+            line-height: 1.1;
+        }
+
+        .kpi-subtext {
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+            letter-spacing: 0.3px;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 28px;
+            margin-bottom: 28px;
+        }
+
+        .chart-card {
+            background: #2A3446;
+            padding: 22px;
+            border-radius: 16px;
+            border: none;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+        }
+
+        .chart-card h3 {
+            font-size: 18px;
+            margin-bottom: 18px;
+            color: #E5E7EB;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .chart-container {
+            height: 300px;
+            position: relative;
+        }
+
+        .bar {
+            background: linear-gradient(90deg, #4D7C0F, #065F46);
+            margin-bottom: 14px;
+            border-radius: 10px;
+            padding: 12px 18px;
+            position: relative;
+            overflow: hidden;
+            height: 42px;
+            display: flex;
+            align-items: center;
+        }
+
+        .bar-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            position: relative;
+            z-index: 1;
+            color: #F9FAFB;
+            font-weight: 500;
+            width: 100%;
+        }
+
+        .bar-fill {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            background: rgba(244, 180, 0, 0.15);
+            transition: width 0.5s ease;
+        }
+
+        .data-table {
+            background: #2A3446;
+            border-radius: 16px;
+            overflow: hidden;
+            border: none;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+        }
+
+        .data-table h3 {
+            padding: 22px 24px;
+            font-size: 18px;
+            font-weight: 600;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            color: #E5E7EB;
+            letter-spacing: 0.3px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #1F2937;
+        }
+
+        th {
+            padding: 16px 20px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.7);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        td {
+            padding: 16px 20px;
+            font-size: 14px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            height: 58px;
+        }
+
+        tbody tr:hover {
+            background: rgba(255,255,255,0.03);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-delivered {
+            background: rgba(34, 197, 94, 0.18);
+            color: #22C55E;
+        }
+
+        .status-transit {
+            background: rgba(245, 158, 11, 0.18);
+            color: #F59E0B;
+        }
+
+        .status-pending {
+            background: rgba(239, 68, 68, 0.18);
+            color: #EF4444;
+        }
+
+        .pie-chart {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .pie-visual {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .pie-legend {
+            flex: 1;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+
+        .legend-color {
+            width: 18px;
+            height: 18px;
+            border-radius: 4px;
+        }
+
+        .legend-text {
+            flex: 1;
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .legend-value {
+            font-weight: 600;
+            color: #F4B400;
+            font-size: 14px;
+        }
+
+        /* Download icon hover */
+        #downloadFarmersBtn:hover #downloadFarmersIcon {
+            stroke: #FACC15;
+        }
+
+        @media (max-width: 768px) {
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filters {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>KSK Agricultural Trade Dashboard</h1>
+        <p>Real-time insights into VCP transactions, commodities, and logistics</p>
+    </div>
+
+    <div class="filters">
+        <div class="filter-group">
+            <label>VCP Name</label>
+            <select id="vcpFilter">
+                <option value="all">All VCPs</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label>Buyer Name</label>
+            <select id="buyerFilter">
+                <option value="all">All Buyers</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label>Commodity</label>
+            <select id="commodityFilter">
+                <option value="all">All Commodities</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label>District</label>
+            <select id="districtFilter">
+                <option value="all">All Districts</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label>Payment Status</label>
+            <select id="paymentFilter">
+                <option value="all">All Payments</option>
+                <option value="COMPLETED">Completed</option>
+                <option value="PENDING">Pending</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label>From Date</label>
+            <input type="date" id="fromDateFilter">
+        </div>
+        <div class="filter-group">
+            <label>To Date</label>
+            <input type="date" id="toDateFilter">
+        </div>
+        <div class="filter-group">
+            <label>&nbsp;</label>
+            <div style="display: flex; gap: 12px;">
+                <button id="applyFilterBtn" style="flex: 1; padding: 12px 22px; background: #F4B400; color: #0F172A; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s ease;">Apply Filters</button>
+                <button id="resetFilterBtn" style="flex: 1; padding: 12px 22px; background: #374151; color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s ease;">Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="kpi-grid">
+        <!-- TOTAL TRANSACTIONS -->
+        <div class="kpi-card">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                <div style="width: 42px; height: 42px; background: rgba(244, 180, 0, 0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                         stroke="#F4B400" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 12l3-3a2 2 0 0 1 1.4-.6H11l2-2a2 2 0 0 1 2.8 0l5.2 5.2"></path>
+                        <path d="M8 13l3 3a2 2 0 0 0 2.8 0l2.2-2.2"></path>
+                        <path d="M5 15l3 3"></path>
+                    </svg>
+                </div>
+                <div class="kpi-label">Total Transactions</div>
+            </div>
+            <div class="kpi-value" id="totalTransactions">0</div>
+            <div class="kpi-subtext">All time trades</div>
+        </div>
+
+        <!-- TOTAL TRADE VALUE -->
+        <div class="kpi-card">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                <div style="width: 42px; height: 42px; background: rgba(244, 180, 0, 0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                         stroke="#F4B400" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M7 5h10"></path>
+                        <path d="M7 9h10"></path>
+                        <path d="M9 5c3 0 5 1.5 5 4s-2 4-5 4H7"></path>
+                        <path d="M9 13l4 6"></path>
+                    </svg>
+                </div>
+                <div class="kpi-label" id="revenueLabel">Total Trade Value</div>
+            </div>
+            <div class="kpi-value" id="totalRevenue">₹0</div>
+            <div class="kpi-subtext">Filtered insights</div>
+        </div>
+
+        <!-- TOTAL QUANTITY -->
+        <div class="kpi-card">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                <div style="width: 42px; height: 42px; background: rgba(244, 180, 0, 0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                         stroke="#F4B400" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="3" x2="12" y2="7"></line>
+                        <line x1="6"  y1="7" x2="18" y2="7"></line>
+                        <path d="M7 7l-3 7h6l-3-7z"></path>
+                        <path d="M17 7l-3 7h6l-3-7z"></path>
+                        <line x1="5" y1="18" x2="19" y2="18"></line>
+                    </svg>
+                </div>
+                <div class="kpi-label">Total Quantity</div>
+            </div>
+            <div class="kpi-value" id="totalQuantity">0 MT</div>
+            <div class="kpi-subtext">Commodities traded</div>
+        </div>
+
+        <!-- PAYMENT STATUS -->
+        <div class="kpi-card">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                <div style="width: 42px; height: 42px; background: rgba(244, 180, 0, 0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                         stroke="#F4B400" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="7" width="18" height="10" rx="2" ry="2"></rect>
+                        <rect x="5" y="9" width="14" height="6" rx="1" ry="1"></rect>
+                        <circle cx="12" cy="12" r="2"></circle>
+                    </svg>
+                </div>
+                <div class="kpi-label">Payment Status</div>
+            </div>
+            <div class="kpi-value" id="totalPayments">0</div>
+            <div class="kpi-subtext">Filtered transactions</div>
+        </div>
+
+        <!-- REGISTERED VCPs -->
+        <div class="kpi-card">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                <div style="width: 42px; height: 42px; background: rgba(244, 180, 0, 0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F4B400" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                </div>
+                <div class="kpi-label">Registered VCPs</div>
+            </div>
+            <div class="kpi-value" id="totalVcps">0</div>
+            <div id="vcpBreakdown" style="margin-top: 10px;"></div>
+        </div>
+
+        <!-- REGISTERED BUYERS -->
+        <div class="kpi-card">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                <div style="width: 42px; height: 42px; background: rgba(244, 180, 0, 0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F4B400" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </div>
+                <div class="kpi-label">Registered Buyers</div>
+            </div>
+            <div class="kpi-value" id="totalBuyers">0</div>
+            <div class="kpi-subtext">Active procurement entities</div>
+        </div>
+
+        <!-- REGISTERED FARMERS (with download icon) -->
+        <div class="kpi-card" style="position: relative;">
+            <!-- Download icon top-right -->
+            <button
+                id="downloadFarmersBtn"
+                title="Download farmers list"
+                style="position: absolute; top: 10px; right: 14px; background: transparent; border: none; padding: 0; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                <svg id="downloadFarmersIcon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                     stroke="#CBD5E1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 3v10"></path>
+                    <path d="M8 9l4 4 4-4"></path>
+                    <path d="M5 17h14"></path>
+                </svg>
+            </button>
+
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                <div style="width: 42px; height: 42px; background: rgba(244, 180, 0, 0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F4B400" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                </div>
+                <div class="kpi-label">Registered Farmers</div>
+            </div>
+            <div class="kpi-value" id="totalFarmers">0</div>
+            <div class="kpi-subtext">Individual cultivators</div>
+        </div>
+    </div>
+
+    <div class="charts-grid">
+        <div class="chart-card">
+            <h3>Top Commodities by Volume</h3>
+            <div class="chart-container" id="commodityChart"></div>
+        </div>
+        <div class="chart-card">
+            <h3>Payment Status Distribution</h3>
+            <div class="chart-container">
+                <div class="pie-chart" id="statusPieChart"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="charts-grid">
+        <div class="chart-card">
+            <h3 id="buyerChartTitle">Top Buyers by Transaction Count</h3>
+            <div class="chart-container" id="buyerChart"></div>
+        </div>
+        <div class="chart-card">
+            <h3>VCP Performance</h3>
+            <div class="chart-container" id="vcpChart"></div>
+        </div>
+    </div>
+
+    <div class="data-table">
+        <h3>Recent Transactions</h3>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Lot ID</th>
+                        <th>Date</th>
+                        <th>VCP</th>
+                        <th>Buyer</th>
+                        <th>Commodity</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total Value</th>
+                        <th>Payment</th>
+                    </tr>
+                </thead>
+                <tbody id="transactionTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const transactionData = [
+            {lotId: "ABC_123_VCP_1", date: "2025-11-03", vcp: "Ajaymeru Kishan Samruddhi FPO", buyer: "XYZ", commodity: "Mustard", quantity: "20 MT", pricePerQ: 5500, status: "DELIVERED", paymentStatus: "COMPLETED", location: "Ajmer-Jaipur"},
+            {lotId: "ABC_123_VCP_2", date: "2025-11-03", vcp: "Ajaymeru Kishan Samruddhi FPO", buyer: "MITTAL OILS", commodity: "Mustard", quantity: "20 MT", pricePerQ: 4900, status: "DELIVERED", paymentStatus: "COMPLETED", location: "Ajmer-TONK"},
+            {lotId: "ABC_123_VCP_3", date: "2025-11-03", vcp: "Ajaymeru Kishan Samruddhi FPO", buyer: "JAIPUR MILLS", commodity: "Moong", quantity: "15 MT", pricePerQ: 4500, status: "DISPATCH NOT STARTED", paymentStatus: "PENDING", location: "Ajmer-JODHPUR"},
+            {lotId: "ABC_123_VCP_4", date: "2025-11-03", vcp: "Ajaymeru Kishan Samruddhi FPO", buyer: "HARE KRISHNA OILS", commodity: "Groundnut", quantity: "10 MT", pricePerQ: 6500, status: "IN TRANSIT", paymentStatus: "PENDING", location: "Ajmer-JAISALMER"},
+            {lotId: "ABC_123_VCP_5", date: "2025-11-03", vcp: "Kekri KVSS", buyer: "JODHPUR DALL MILLS", commodity: "Mustard", quantity: "20 MT", pricePerQ: 5600, status: "DELIVERED", paymentStatus: "COMPLETED", location: "Ajmer-KEKRI"},
+            {lotId: "ABC_123_VCP_6", date: "2025-11-03", vcp: "Kekri KVSS", buyer: "XYZ", commodity: "Groundnut", quantity: "15 MT", pricePerQ: 6700, status: "IN TRANSIT", paymentStatus: "PENDING", location: "Ajmer-Jaipur"},
+            {lotId: "ABC_123_VCP_7", date: "2025-11-03", vcp: "Kekri KVSS", buyer: "MITTAL OILS", commodity: "Moong", quantity: "10 MT", pricePerQ: 4800, status: "DELIVERED", paymentStatus: "COMPLETED", location: "Ajmer-TONK"},
+            {lotId: "ABC_123_VCP_8", date: "2025-11-03", vcp: "Sri Ram GSSS", buyer: "JAIPUR MILLS", commodity: "Mustard", quantity: "15 MT", pricePerQ: 5300, status: "DELIVERED", paymentStatus: "COMPLETED", location: "Ajmer-JODHPUR"},
+            {lotId: "ABC_123_VCP_9", date: "2025-11-03", vcp: "Sri Ram GSSS", buyer: "HARE KRISHNA OILS", commodity: "Groundnut", quantity: "12 MT", pricePerQ: 6400, status: "IN TRANSIT", paymentStatus: "PENDING", location: "Ajmer-JAISALMER"},
+            {lotId: "ABC_123_VCP_10", date: "2025-11-03", vcp: "Sri Ram GSSS", buyer: "JODHPUR DALL MILLS", commodity: "Moong", quantity: "18 MT", pricePerQ: 4600, status: "DELIVERED", paymentStatus: "COMPLETED", location: "Ajmer-KEKRI"},
+            {lotId: "ABC_123_VCP_11", date: "2025-11-03", vcp: "Deoli KVSS", buyer: "XYZ", commodity: "Mustard", quantity: "25 MT", pricePerQ: 5450, status: "DELIVERED", paymentStatus: "COMPLETED", location: "Ajmer-Jaipur"},
+            {lotId: "ABC_123_VCP_12", date: "2025-11-03", vcp: "Deoli KVSS", buyer: "MITTAL OILS", commodity: "Groundnut", quantity: "10 MT", pricePerQ: 6550, status: "DISPATCH NOT STARTED", paymentStatus: "PENDING", location: "Ajmer-TONK"}
+        ];
+
+        const vcpData = [
+            {name: "Ajaymeru Kishan Samruddhi Producer Company Ltd", type: "FPO", district: "Ajmer", state: "Rajasthan"},
+            {name: "Kekri Co-operative Marketing Society Company", type: "KVSS", district: "Ajmer", state: "Rajasthan"},
+            {name: "Sri Ram Gram Seva Sahakari Samiti Company", type: "GSSS", district: "Ajmer", state: "Rajasthan"},
+            {name: "Deoli Krya Vikraya Sahakari Saimiti Limited", type: "KVSS", district: "Tonk", state: "Rajasthan"},
+            {name: "Newai Rajeevika Mahila Kisan Producer Company", type: "FPO", district: "Tonk", state: "Rajasthan"},
+            {name: "Additional FPO 1", type: "FPO", district: "Ajmer", state: "Rajasthan"},
+            {name: "Additional FPO 2", type: "FPO", district: "Tonk", state: "Rajasthan"},
+            {name: "Additional KVSS 1", type: "KVSS", district: "Ajmer", state: "Rajasthan"},
+            {name: "Additional GSSS 1", type: "GSSS", district: "Tonk", state: "Rajasthan"},
+            {name: "Additional FPO 3", type: "FPO", district: "Jaipur", state: "Rajasthan"}
+        ];
+
+        const buyerData = [
+            {name: "ABC Pvt ltd", type: "Individual Buyer", district: "Jaipur"},
+            {name: "XYZ Public Ltd", type: "Institutional Buyer", district: "Ajmer"},
+            {name: "MITTAL OILS", type: "Institutional Buyer", district: "Tonk"},
+            {name: "JAIPUR MILLS", type: "Institutional Buyer", district: "Jaipur"},
+            {name: "HARE KRISHNA OILS", type: "Individual Buyer", district: "Ajmer"},
+            {name: "JODHPUR DALL MILLS", type: "Institutional Buyer", district: "Jodhpur"},
+            {name: "Additional Buyer 1", type: "Individual Buyer", district: "Ajmer"},
+            {name: "Additional Buyer 2", type: "Institutional Buyer", district: "Tonk"},
+            {name: "Additional Buyer 3", type: "Individual Buyer", district: "Jaipur"},
+            {name: "Additional Buyer 4", type: "Institutional Buyer", district: "Jodhpur"}
+        ];
+
+        const farmerData = [
+            {name: "Heerlal choudary", mobile: "9511519505", district: "Tonk", vcp: "KVSS", commodity: "", registrationDate: ""},
+            {name: "MUKESH", mobile: "8769512765", district: "Tonk", vcp: "KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 3", mobile: "", district: "Ajmer", vcp: "Ajaymeru Kishan Samruddhi FPO", commodity: "", registrationDate: ""},
+            {name: "Farmer 4", mobile: "", district: "Ajmer", vcp: "Kekri KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 5", mobile: "", district: "Tonk", vcp: "Sri Ram GSSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 6", mobile: "", district: "Jaipur", vcp: "Deoli KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 7", mobile: "", district: "Ajmer", vcp: "Ajaymeru Kishan Samruddhi FPO", commodity: "", registrationDate: ""},
+            {name: "Farmer 8", mobile: "", district: "Tonk", vcp: "Kekri KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 9", mobile: "", district: "Jaipur", vcp: "Sri Ram GSSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 10", mobile: "", district: "Ajmer", vcp: "Deoli KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 11", mobile: "", district: "Tonk", vcp: "Ajaymeru Kishan Samruddhi FPO", commodity: "", registrationDate: ""},
+            {name: "Farmer 12", mobile: "", district: "Jaipur", vcp: "Kekri KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 13", mobile: "", district: "Ajmer", vcp: "Sri Ram GSSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 14", mobile: "", district: "Tonk", vcp: "Deoli KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 15", mobile: "", district: "Jaipur", vcp: "Ajaymeru Kishan Samruddhi FPO", commodity: "", registrationDate: ""},
+            {name: "Farmer 16", mobile: "", district: "Ajmer", vcp: "Kekri KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 17", mobile: "", district: "Tonk", vcp: "Sri Ram GSSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 18", mobile: "", district: "Jaipur", vcp: "Deoli KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 19", mobile: "", district: "Ajmer", vcp: "Ajaymeru Kishan Samruddhi FPO", commodity: "", registrationDate: ""},
+            {name: "Farmer 20", mobile: "", district: "Tonk", vcp: "Kekri KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 21", mobile: "", district: "Jaipur", vcp: "Sri Ram GSSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 22", mobile: "", district: "Ajmer", vcp: "Deoli KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 23", mobile: "", district: "Tonk", vcp: "Ajaymeru Kishan Samruddhi FPO", commodity: "", registrationDate: ""},
+            {name: "Farmer 24", mobile: "", district: "Jaipur", vcp: "Kekri KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 25", mobile: "", district: "Ajmer", vcp: "Sri Ram GSSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 26", mobile: "", district: "Tonk", vcp: "Deoli KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 27", mobile: "", district: "Jaipur", vcp: "Ajaymeru Kishan Samruddhi FPO", commodity: "", registrationDate: ""},
+            {name: "Farmer 28", mobile: "", district: "Ajmer", vcp: "Kekri KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 29", mobile: "", district: "Tonk", vcp: "Sri Ram GSSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 30", mobile: "", district: "Jaipur", vcp: "Deoli KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 31", mobile: "", district: "Ajmer", vcp: "Ajaymeru Kishan Samruddhi FPO", commodity: "", registrationDate: ""},
+            {name: "Farmer 32", mobile: "", district: "Tonk", vcp: "Kekri KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 33", mobile: "", district: "Jaipur", vcp: "Sri Ram GSSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 34", mobile: "", district: "Ajmer", vcp: "Deoli KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 35", mobile: "", district: "Tonk", vcp: "Ajaymeru Kishan Samruddhi FPO", commodity: "", registrationDate: ""},
+            {name: "Farmer 36", mobile: "", district: "Jaipur", vcp: "Kekri KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 37", mobile: "", district: "Ajmer", vcp: "Sri Ram GSSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 38", mobile: "", district: "Tonk", vcp: "Deoli KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 39", mobile: "", district: "Jaipur", vcp: "Ajaymeru Kishan Samruddhi FPO", commodity: "", registrationDate: ""},
+            {name: "Farmer 40", mobile: "", district: "Ajmer", vcp: "Kekri KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 41", mobile: "", district: "Tonk", vcp: "Sri Ram GSSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 42", mobile: "", district: "Jaipur", vcp: "Deoli KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 43", mobile: "", district: "Ajmer", vcp: "Ajaymeru Kishan Samruddhi FPO", commodity: "", registrationDate: ""},
+            {name: "Farmer 44", mobile: "", district: "Tonk", vcp: "Kekri KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 45", mobile: "", district: "Jaipur", vcp: "Sri Ram GSSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 46", mobile: "", district: "Ajmer", vcp: "Deoli KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 47", mobile: "", district: "Tonk", vcp: "Ajaymeru Kishan Samruddhi FPO", commodity: "", registrationDate: ""},
+            {name: "Farmer 48", mobile: "", district: "Jaipur", vcp: "Kekri KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 49", mobile: "", district: "Ajmer", vcp: "Sri Ram GSSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 50", mobile: "", district: "Tonk", vcp: "Deoli KVSS", commodity: "", registrationDate: ""}
+        ];
+
+        let filteredData = [...transactionData];
+        let filteredVcps = [...vcpData];
+        let filteredBuyers = [...buyerData];
+        let filteredFarmers = [...farmerData];
+
+        function parseQuantity(quantityStr) {
+            return parseFloat(quantityStr.replace(' MT', ''));
+        }
+
+        function calculateMetrics() {
+            const totalTransactions = filteredData.length;
+            const totalRevenue = filteredData.reduce((sum, t) => {
+                const qty = parseQuantity(t.quantity);
+                return sum + (qty * t.pricePerQ);
+            }, 0);
+            const totalQuantity = filteredData.reduce((sum, t) => sum + parseQuantity(t.quantity), 0);
+            const totalVcps = filteredVcps.length;
+            const fpoCount = filteredVcps.filter(v => v.type === 'FPO').length;
+            const kvssCount = filteredVcps.filter(v => v.type === 'KVSS').length;
+            const gsssCount = filteredVcps.filter(v => v.type === 'GSSS').length;
+
+            const commodityFilter = document.getElementById('commodityFilter').value;
+            let revenueLabel = 'Total Trade Value';
+            if (commodityFilter !== 'all') {
+                revenueLabel = `Trade Value — ${commodityFilter}`;
+            }
+            document.getElementById('revenueLabel').textContent = revenueLabel;
+            
+            document.getElementById('totalTransactions').textContent = totalTransactions;
+            document.getElementById('totalRevenue').textContent = `₹${(totalRevenue / 100000).toFixed(2)}L`;
+            document.getElementById('totalQuantity').textContent = `${totalQuantity} MT`;
+            document.getElementById('totalVcps').textContent = totalVcps;
+            
+            const vcpBreakdownHtml = `
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; text-align: center;">
+                    <!-- Row 1: Labels -->
+                    <div style="display: flex; align-items: center; justify-content: center; font-size: 12px; color: #94A3B8; font-weight: 500;">
+                        <span style="width: 6px; height: 6px; border-radius: 50%; background: #16A34A; margin-right: 6px;"></span>
+                        <span>FPO</span>
+                    </div>
+                    <div style="display: flex; align-items: center; justify-content: center; font-size: 12px; color: #94A3B8; font-weight: 500;">
+                        <span style="width: 6px; height: 6px; border-radius: 50%; background: #F59E0B; margin-right: 6px;"></span>
+                        <span>KVSS</span>
+                    </div>
+                    <div style="display: flex; align-items: center; justify-content: center; font-size: 12px; color: #94A3B8; font-weight: 500;">
+                        <span style="width: 6px; height: 6px; border-radius: 50%; background: #3B82F6; margin-right: 6px;"></span>
+                        <span>GSSS</span>
+                    </div>
+                    <!-- Row 2: Counts -->
+                    <div style="font-size: 14px; font-weight: 700; color: #FACC15;">${fpoCount}</div>
+                    <div style="font-size: 14px; font-weight: 700; color: #FACC15;">${kvssCount}</div>
+                    <div style="font-size: 14px; font-weight: 700; color: #FACC15;">${gsssCount}</div>
+                </div>
+            `;
+            document.getElementById('vcpBreakdown').innerHTML = vcpBreakdownHtml;
+            
+            document.getElementById('totalBuyers').textContent = filteredBuyers.length;
+            document.getElementById('totalFarmers').textContent = filteredFarmers.length;
+            
+            const paymentFilter = document.getElementById('paymentFilter').value;
+            let paymentCount = filteredData.length;
+            let paymentLabel = 'All Transactions';
+            
+            if (paymentFilter === 'COMPLETED') {
+                paymentCount = filteredData.filter(t => t.paymentStatus === 'COMPLETED').length;
+                paymentLabel = 'Completed Payments';
+            } else if (paymentFilter === 'PENDING') {
+                paymentCount = filteredData.filter(t => t.paymentStatus === 'PENDING').length;
+                paymentLabel = 'Pending Payments';
+            }
+            
+            document.getElementById('totalPayments').textContent = paymentCount;
+            document.querySelector('#totalPayments').parentElement.querySelector('.kpi-subtext').textContent = paymentLabel;
+        }
+
+        function renderCommodityChart() {
+            const commodityCounts = {};
+            filteredData.forEach(t => {
+                const qty = parseQuantity(t.quantity);
+                commodityCounts[t.commodity] = (commodityCounts[t.commodity] || 0) + qty;
+            });
+
+            const sorted = Object.entries(commodityCounts)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5);
+
+            const maxValue = Math.max(...sorted.map(s => s[1])) || 1;
+
+            const html = sorted.map(([commodity, quantity]) => {
+                const percentage = (quantity / maxValue) * 100;
+                return `
+                    <div class="bar">
+                        <div class="bar-fill" style="width: ${percentage}%"></div>
+                        <div class="bar-label">
+                            <span>${commodity}</span>
+                            <span>${quantity.toFixed(1)} MT</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('commodityChart').innerHTML = html;
+        }
+
+        function renderStatusPieChart() {
+            const statusCounts = {};
+            filteredData.forEach(t => {
+                statusCounts[t.paymentStatus] = (statusCounts[t.paymentStatus] || 0) + 1;
+            });
+
+            const total = filteredData.length || 1;
+            const colors = {
+                'COMPLETED': '#1E4D3A',
+                'PENDING': '#F4B400'
+            };
+
+            let currentAngle = 0;
+            const gradients = Object.entries(statusCounts).map(([status, count]) => {
+                const percentage = (count / total) * 100;
+                const angle = (count / total) * 360;
+                const result = {status, count, percentage, startAngle: currentAngle, angle, color: colors[status]};
+                currentAngle += angle;
+                return result;
+            });
+
+            const pieBackground = gradients.map(g => 
+                `${g.color} ${g.startAngle}deg ${g.startAngle + g.angle}deg`
+            ).join(', ');
+
+            const legendHtml = gradients.map(g => `
+                <div class="legend-item">
+                    <div class="legend-color" style="background: ${g.color}"></div>
+                    <div class="legend-text">${g.status}</div>
+                    <div class="legend-value">${g.count} (${g.percentage.toFixed(1)}%)</div>
+                </div>
+            `).join('');
+
+            document.getElementById('statusPieChart').innerHTML = `
+                <div class="pie-visual" style="background: conic-gradient(${pieBackground})"></div>
+                <div class="pie-legend">${legendHtml}</div>
+            `;
+        }
+
+        function renderBuyerChart() {
+            const vcpFilterValue = document.getElementById('vcpFilter').value;
+            const buyerFilterValue = document.getElementById('buyerFilter').value;
+            const titleElement = document.getElementById('buyerChartTitle');
+
+            const useVcpMode = vcpFilterValue !== 'all' && buyerFilterValue === 'all';
+
+            let counts = {};
+            if (useVcpMode) {
+                filteredData.forEach(t => {
+                    counts[t.vcp] = (counts[t.vcp] || 0) + 1;
+                });
+                titleElement.textContent = 'Top VCPs by Transaction Count';
+            } else {
+                filteredData.forEach(t => {
+                    counts[t.buyer] = (counts[t.buyer] || 0) + 1;
+                });
+                titleElement.textContent = 'Top Buyers by Transaction Count';
+            }
+
+            const sorted = Object.entries(counts)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5);
+
+            if (sorted.length === 0) {
+                document.getElementById('buyerChart').innerHTML = '<p style="color:#cbd5e1;font-size:14px;">No data for selected filters</p>';
+                return;
+            }
+
+            const maxValue = Math.max(...sorted.map(s => s[1])) || 1;
+
+            const html = sorted.map(([label, count]) => {
+                const percentage = (count / maxValue) * 100;
+                return `
+                    <div class="bar">
+                        <div class="bar-fill" style="width: ${percentage}%"></div>
+                        <div class="bar-label">
+                            <span>${label}</span>
+                            <span>${count} transactions</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('buyerChart').innerHTML = html;
+        }
+
+        function renderVcpChart() {
+            const vcpCounts = {};
+            filteredData.forEach(t => {
+                vcpCounts[t.vcp] = (vcpCounts[t.vcp] || 0) + 1;
+            });
+
+            const sorted = Object.entries(vcpCounts)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5);
+
+            const maxValue = Math.max(...sorted.map(s => s[1])) || 1;
+
+            const html = sorted.map(([vcp, count]) => {
+                const percentage = (count / maxValue) * 100;
+                return `
+                    <div class="bar">
+                        <div class="bar-fill" style="width: ${percentage}%"></div>
+                        <div class="bar-label">
+                            <span>${vcp}</span>
+                            <span>${count} transactions</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('vcpChart').innerHTML = html;
+        }
+
+        function renderTransactionTable() {
+            const tbody = document.getElementById('transactionTableBody');
+            const html = filteredData.slice(0, 10).map(t => {
+                const qty = parseQuantity(t.quantity);
+                const totalValue = qty * t.pricePerQ;
+                const paymentClass = t.paymentStatus === 'COMPLETED' ? 'status-delivered' : 'status-pending';
+                
+                return `
+                    <tr>
+                        <td>${t.lotId}</td>
+                        <td>${t.date}</td>
+                        <td>${t.vcp}</td>
+                        <td>${t.buyer}</td>
+                        <td>${t.commodity}</td>
+                        <td>${t.quantity}</td>
+                        <td>₹${t.pricePerQ.toLocaleString()}/Q</td>
+                        <td>₹${totalValue.toLocaleString()}</td>
+                        <td><span class="status-badge ${paymentClass}">${t.paymentStatus}</span></td>
+                    </tr>
+                `;
+            }).join('');
+
+            tbody.innerHTML = html;
+        }
+
+        function populateFilters() {
+            const vcpFilter = document.getElementById('vcpFilter');
+            const buyerFilter = document.getElementById('buyerFilter');
+            const commodityFilter = document.getElementById('commodityFilter');
+            const districtFilter = document.getElementById('districtFilter');
+
+            const uniqueVcps = [...new Set(transactionData.map(t => t.vcp))];
+            const uniqueBuyers = [...new Set(transactionData.map(t => t.buyer))];
+            const uniqueCommodities = [...new Set(transactionData.map(t => t.commodity))];
+            const uniqueDistricts = [...new Set([
+                ...vcpData.map(v => v.district),
+                ...buyerData.map(b => b.district),
+                ...farmerData.map(f => f.district)
+            ])].sort();
+
+            uniqueVcps.forEach(vcp => {
+                const option = document.createElement('option');
+                option.value = vcp;
+                option.textContent = vcp;
+                vcpFilter.appendChild(option);
+            });
+
+            uniqueBuyers.forEach(buyer => {
+                const option = document.createElement('option');
+                option.value = buyer;
+                option.textContent = buyer;
+                buyerFilter.appendChild(option);
+            });
+
+            uniqueCommodities.forEach(commodity => {
+                const option = document.createElement('option');
+                option.value = commodity;
+                option.textContent = commodity;
+                commodityFilter.appendChild(option);
+            });
+
+            uniqueDistricts.forEach(district => {
+                const option = document.createElement('option');
+                option.value = district;
+                option.textContent = district;
+                districtFilter.appendChild(option);
+            });
+        }
+
+        function applyFilters() {
+            const vcpFilterValue = document.getElementById('vcpFilter').value;
+            const buyerFilterValue = document.getElementById('buyerFilter').value;
+            const commodityFilterValue = document.getElementById('commodityFilter').value;
+            const paymentFilterValue = document.getElementById('paymentFilter').value;
+            const fromDateFilter = document.getElementById('fromDateFilter').value;
+            const toDateFilter = document.getElementById('toDateFilter').value;
+            const districtFilterValue = document.getElementById('districtFilter').value;
+
+            filteredData = transactionData.filter(t => {
+                if (vcpFilterValue !== 'all' && t.vcp !== vcpFilterValue) return false;
+                if (buyerFilterValue !== 'all' && t.buyer !== buyerFilterValue) return false;
+                if (commodityFilterValue !== 'all' && t.commodity !== commodityFilterValue) return false;
+                if (paymentFilterValue !== 'all' && t.paymentStatus !== paymentFilterValue) return false;
+                if (fromDateFilter && t.date < fromDateFilter) return false;
+                if (toDateFilter && t.date > toDateFilter) return false;
+                return true;
+            });
+
+            filteredVcps = vcpData.filter(v => {
+                if (districtFilterValue !== 'all' && v.district !== districtFilterValue) return false;
+                return true;
+            });
+
+            filteredBuyers = buyerData.filter(b => {
+                if (districtFilterValue !== 'all' && b.district !== districtFilterValue) return false;
+                return true;
+            });
+
+            filteredFarmers = farmerData.filter(f => {
+                if (districtFilterValue !== 'all' && f.district !== districtFilterValue) return false;
+                return true;
+            });
+
+            updateDashboard();
+        }
+
+        function updateDashboard() {
+            calculateMetrics();
+            renderCommodityChart();
+            renderStatusPieChart();
+            renderBuyerChart();
+            renderVcpChart();
+            renderTransactionTable();
+        }
+
+        // Export full farmers master as CSV (no filters)
+        function downloadFarmersData() {
+            const headers = [
+                'Farmer Name',
+                'Mobile Number',
+                'District',
+                'VCP Name',
+                'Commodity',
+                'Registration Date'
+            ];
+
+            const rows = farmerData.map(f => {
+                const farmerName = f.name || '';
+                const mobile = f.mobile || f.mobileNumber || '';
+                const district = f.district || '';
+                const vcpName = f.vcp || f.vcpName || '';
+                const commodity = f.commodity || '';
+                const regDate = f.registrationDate || '';
+
+                const safe = value => {
+                    const v = String(value ?? '');
+                    if (v.includes('"') || v.includes(',') || v.includes('\n')) {
+                        return `"${v.replace(/"/g, '""')}"`;
+                    }
+                    return v;
+                };
+
+                return [
+                    safe(farmerName),
+                    safe(mobile),
+                    safe(district),
+                    safe(vcpName),
+                    safe(commodity),
+                    safe(regDate)
+                ].join(',');
+            });
+
+            const csvContent = [headers.join(','), ...rows].join('\n');
+
+            const blob = new Blob([csvContent], {
+                type: 'text/csv;charset=utf-8;'
+            });
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'Registered_Farmers_Full_List.csv');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('downloadFarmersBtn');
+            if (btn) {
+                btn.addEventListener('click', downloadFarmersData);
+            }
+
+            document.getElementById('applyFilterBtn').addEventListener('click', applyFilters);
+            
+            document.getElementById('resetFilterBtn').addEventListener('click', () => {
+                document.getElementById('vcpFilter').value = 'all';
+                document.getElementById('buyerFilter').value = 'all';
+                document.getElementById('commodityFilter').value = 'all';
+                document.getElementById('paymentFilter').value = 'all';
+                document.getElementById('fromDateFilter').value = '';
+                document.getElementById('toDateFilter').value = '';
+                document.getElementById('districtFilter').value = 'all';
+                applyFilters();
+            });
+
+            populateFilters();
+            updateDashboard();
+        });
+    </script>
+</body>
+</html>
