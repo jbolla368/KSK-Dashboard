@@ -323,6 +323,11 @@
             font-size: 14px;
         }
 
+        /* Download icon hover */
+        #downloadFarmersBtn:hover #downloadFarmersIcon {
+            stroke: #FACC15;
+        }
+
         @media (max-width: 768px) {
             .kpi-grid {
                 grid-template-columns: 1fr;
@@ -498,8 +503,21 @@
             <div class="kpi-subtext">Active procurement entities</div>
         </div>
 
-        <!-- REGISTERED FARMERS -->
-        <div class="kpi-card">
+        <!-- REGISTERED FARMERS (with download icon) -->
+        <div class="kpi-card" style="position: relative;">
+            <!-- Download icon top-right -->
+            <button
+                id="downloadFarmersBtn"
+                title="Download farmers list"
+                style="position: absolute; top: 10px; right: 14px; background: transparent; border: none; padding: 0; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                <svg id="downloadFarmersIcon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                     stroke="#CBD5E1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 3v10"></path>
+                    <path d="M8 9l4 4 4-4"></path>
+                    <path d="M5 17h14"></path>
+                </svg>
+            </button>
+
             <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
                 <div style="width: 42px; height: 42px; background: rgba(244, 180, 0, 0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F4B400" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -605,56 +623,56 @@
         ];
 
         const farmerData = [
-            {name: "Heerlal choudary", vcp: "KVSS", district: "Tonk"},
-            {name: "MUKESH", vcp: "KVSS", district: "Tonk"},
-            {name: "Farmer 3", vcp: "Ajaymeru Kishan Samruddhi FPO", district: "Ajmer"},
-            {name: "Farmer 4", vcp: "Kekri KVSS", district: "Ajmer"},
-            {name: "Farmer 5", vcp: "Sri Ram GSSS", district: "Tonk"},
-            {name: "Farmer 6", vcp: "Deoli KVSS", district: "Jaipur"},
-            {name: "Farmer 7", vcp: "Ajaymeru Kishan Samruddhi FPO", district: "Ajmer"},
-            {name: "Farmer 8", vcp: "Kekri KVSS", district: "Tonk"},
-            {name: "Farmer 9", vcp: "Sri Ram GSSS", district: "Jaipur"},
-            {name: "Farmer 10", vcp: "Deoli KVSS", district: "Ajmer"},
-            {name: "Farmer 11", vcp: "Ajaymeru Kishan Samruddhi FPO", district: "Tonk"},
-            {name: "Farmer 12", vcp: "Kekri KVSS", district: "Jaipur"},
-            {name: "Farmer 13", vcp: "Sri Ram GSSS", district: "Ajmer"},
-            {name: "Farmer 14", vcp: "Deoli KVSS", district: "Tonk"},
-            {name: "Farmer 15", vcp: "Ajaymeru Kishan Samruddhi FPO", district: "Jaipur"},
-            {name: "Farmer 16", vcp: "Kekri KVSS", district: "Ajmer"},
-            {name: "Farmer 17", vcp: "Sri Ram GSSS", district: "Tonk"},
-            {name: "Farmer 18", vcp: "Deoli KVSS", district: "Jaipur"},
-            {name: "Farmer 19", vcp: "Ajaymeru Kishan Samruddhi FPO", district: "Ajmer"},
-            {name: "Farmer 20", vcp: "Kekri KVSS", district: "Tonk"},
-            {name: "Farmer 21", vcp: "Sri Ram GSSS", district: "Jaipur"},
-            {name: "Farmer 22", vcp: "Deoli KVSS", district: "Ajmer"},
-            {name: "Farmer 23", vcp: "Ajaymeru Kishan Samruddhi FPO", district: "Tonk"},
-            {name: "Farmer 24", vcp: "Kekri KVSS", district: "Jaipur"},
-            {name: "Farmer 25", vcp: "Sri Ram GSSS", district: "Ajmer"},
-            {name: "Farmer 26", vcp: "Deoli KVSS", district: "Tonk"},
-            {name: "Farmer 27", vcp: "Ajaymeru Kishan Samruddhi FPO", district: "Jaipur"},
-            {name: "Farmer 28", vcp: "Kekri KVSS", district: "Ajmer"},
-            {name: "Farmer 29", vcp: "Sri Ram GSSS", district: "Tonk"},
-            {name: "Farmer 30", vcp: "Deoli KVSS", district: "Jaipur"},
-            {name: "Farmer 31", vcp: "Ajaymeru Kishan Samruddhi FPO", district: "Ajmer"},
-            {name: "Farmer 32", vcp: "Kekri KVSS", district: "Tonk"},
-            {name: "Farmer 33", vcp: "Sri Ram GSSS", district: "Jaipur"},
-            {name: "Farmer 34", vcp: "Deoli KVSS", district: "Ajmer"},
-            {name: "Farmer 35", vcp: "Ajaymeru Kishan Samruddhi FPO", district: "Tonk"},
-            {name: "Farmer 36", vcp: "Kekri KVSS", district: "Jaipur"},
-            {name: "Farmer 37", vcp: "Sri Ram GSSS", district: "Ajmer"},
-            {name: "Farmer 38", vcp: "Deoli KVSS", district: "Tonk"},
-            {name: "Farmer 39", vcp: "Ajaymeru Kishan Samruddhi FPO", district: "Jaipur"},
-            {name: "Farmer 40", vcp: "Kekri KVSS", district: "Ajmer"},
-            {name: "Farmer 41", vcp: "Sri Ram GSSS", district: "Tonk"},
-            {name: "Farmer 42", vcp: "Deoli KVSS", district: "Jaipur"},
-            {name: "Farmer 43", vcp: "Ajaymeru Kishan Samruddhi FPO", district: "Ajmer"},
-            {name: "Farmer 44", vcp: "Kekri KVSS", district: "Tonk"},
-            {name: "Farmer 45", vcp: "Sri Ram GSSS", district: "Jaipur"},
-            {name: "Farmer 46", vcp: "Deoli KVSS", district: "Ajmer"},
-            {name: "Farmer 47", vcp: "Ajaymeru Kishan Samruddhi FPO", district: "Tonk"},
-            {name: "Farmer 48", vcp: "Kekri KVSS", district: "Jaipur"},
-            {name: "Farmer 49", vcp: "Sri Ram GSSS", district: "Ajmer"},
-            {name: "Farmer 50", vcp: "Deoli KVSS", district: "Tonk"}
+            {name: "Heerlal choudary", mobile: "9511519505", district: "Tonk", vcp: "KVSS", commodity: "", registrationDate: ""},
+            {name: "MUKESH", mobile: "8769512765", district: "Tonk", vcp: "KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 3", mobile: "", district: "Ajmer", vcp: "Ajaymeru Kishan Samruddhi FPO", commodity: "", registrationDate: ""},
+            {name: "Farmer 4", mobile: "", district: "Ajmer", vcp: "Kekri KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 5", mobile: "", district: "Tonk", vcp: "Sri Ram GSSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 6", mobile: "", district: "Jaipur", vcp: "Deoli KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 7", mobile: "", district: "Ajmer", vcp: "Ajaymeru Kishan Samruddhi FPO", commodity: "", registrationDate: ""},
+            {name: "Farmer 8", mobile: "", district: "Tonk", vcp: "Kekri KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 9", mobile: "", district: "Jaipur", vcp: "Sri Ram GSSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 10", mobile: "", district: "Ajmer", vcp: "Deoli KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 11", mobile: "", district: "Tonk", vcp: "Ajaymeru Kishan Samruddhi FPO", commodity: "", registrationDate: ""},
+            {name: "Farmer 12", mobile: "", district: "Jaipur", vcp: "Kekri KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 13", mobile: "", district: "Ajmer", vcp: "Sri Ram GSSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 14", mobile: "", district: "Tonk", vcp: "Deoli KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 15", mobile: "", district: "Jaipur", vcp: "Ajaymeru Kishan Samruddhi FPO", commodity: "", registrationDate: ""},
+            {name: "Farmer 16", mobile: "", district: "Ajmer", vcp: "Kekri KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 17", mobile: "", district: "Tonk", vcp: "Sri Ram GSSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 18", mobile: "", district: "Jaipur", vcp: "Deoli KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 19", mobile: "", district: "Ajmer", vcp: "Ajaymeru Kishan Samruddhi FPO", commodity: "", registrationDate: ""},
+            {name: "Farmer 20", mobile: "", district: "Tonk", vcp: "Kekri KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 21", mobile: "", district: "Jaipur", vcp: "Sri Ram GSSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 22", mobile: "", district: "Ajmer", vcp: "Deoli KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 23", mobile: "", district: "Tonk", vcp: "Ajaymeru Kishan Samruddhi FPO", commodity: "", registrationDate: ""},
+            {name: "Farmer 24", mobile: "", district: "Jaipur", vcp: "Kekri KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 25", mobile: "", district: "Ajmer", vcp: "Sri Ram GSSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 26", mobile: "", district: "Tonk", vcp: "Deoli KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 27", mobile: "", district: "Jaipur", vcp: "Ajaymeru Kishan Samruddhi FPO", commodity: "", registrationDate: ""},
+            {name: "Farmer 28", mobile: "", district: "Ajmer", vcp: "Kekri KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 29", mobile: "", district: "Tonk", vcp: "Sri Ram GSSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 30", mobile: "", district: "Jaipur", vcp: "Deoli KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 31", mobile: "", district: "Ajmer", vcp: "Ajaymeru Kishan Samruddhi FPO", commodity: "", registrationDate: ""},
+            {name: "Farmer 32", mobile: "", district: "Tonk", vcp: "Kekri KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 33", mobile: "", district: "Jaipur", vcp: "Sri Ram GSSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 34", mobile: "", district: "Ajmer", vcp: "Deoli KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 35", mobile: "", district: "Tonk", vcp: "Ajaymeru Kishan Samruddhi FPO", commodity: "", registrationDate: ""},
+            {name: "Farmer 36", mobile: "", district: "Jaipur", vcp: "Kekri KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 37", mobile: "", district: "Ajmer", vcp: "Sri Ram GSSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 38", mobile: "", district: "Tonk", vcp: "Deoli KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 39", mobile: "", district: "Jaipur", vcp: "Ajaymeru Kishan Samruddhi FPO", commodity: "", registrationDate: ""},
+            {name: "Farmer 40", mobile: "", district: "Ajmer", vcp: "Kekri KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 41", mobile: "", district: "Tonk", vcp: "Sri Ram GSSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 42", mobile: "", district: "Jaipur", vcp: "Deoli KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 43", mobile: "", district: "Ajmer", vcp: "Ajaymeru Kishan Samruddhi FPO", commodity: "", registrationDate: ""},
+            {name: "Farmer 44", mobile: "", district: "Tonk", vcp: "Kekri KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 45", mobile: "", district: "Jaipur", vcp: "Sri Ram GSSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 46", mobile: "", district: "Ajmer", vcp: "Deoli KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 47", mobile: "", district: "Tonk", vcp: "Ajaymeru Kishan Samruddhi FPO", commodity: "", registrationDate: ""},
+            {name: "Farmer 48", mobile: "", district: "Jaipur", vcp: "Kekri KVSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 49", mobile: "", district: "Ajmer", vcp: "Sri Ram GSSS", commodity: "", registrationDate: ""},
+            {name: "Farmer 50", mobile: "", district: "Tonk", vcp: "Deoli KVSS", commodity: "", registrationDate: ""}
         ];
 
         let filteredData = [...transactionData];
@@ -990,21 +1008,81 @@
             renderTransactionTable();
         }
 
-        document.getElementById('applyFilterBtn').addEventListener('click', applyFilters);
-        
-        document.getElementById('resetFilterBtn').addEventListener('click', () => {
-            document.getElementById('vcpFilter').value = 'all';
-            document.getElementById('buyerFilter').value = 'all';
-            document.getElementById('commodityFilter').value = 'all';
-            document.getElementById('paymentFilter').value = 'all';
-            document.getElementById('fromDateFilter').value = '';
-            document.getElementById('toDateFilter').value = '';
-            document.getElementById('districtFilter').value = 'all';
-            applyFilters();
-        });
+        // Export full farmers master as CSV (no filters)
+        function downloadFarmersData() {
+            const headers = [
+                'Farmer Name',
+                'Mobile Number',
+                'District',
+                'VCP Name',
+                'Commodity',
+                'Registration Date'
+            ];
 
-        populateFilters();
-        updateDashboard();
+            const rows = farmerData.map(f => {
+                const farmerName = f.name || '';
+                const mobile = f.mobile || f.mobileNumber || '';
+                const district = f.district || '';
+                const vcpName = f.vcp || f.vcpName || '';
+                const commodity = f.commodity || '';
+                const regDate = f.registrationDate || '';
+
+                const safe = value => {
+                    const v = String(value ?? '');
+                    if (v.includes('"') || v.includes(',') || v.includes('\n')) {
+                        return `"${v.replace(/"/g, '""')}"`;
+                    }
+                    return v;
+                };
+
+                return [
+                    safe(farmerName),
+                    safe(mobile),
+                    safe(district),
+                    safe(vcpName),
+                    safe(commodity),
+                    safe(regDate)
+                ].join(',');
+            });
+
+            const csvContent = [headers.join(','), ...rows].join('\n');
+
+            const blob = new Blob([csvContent], {
+                type: 'text/csv;charset=utf-8;'
+            });
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'Registered_Farmers_Full_List.csv');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('downloadFarmersBtn');
+            if (btn) {
+                btn.addEventListener('click', downloadFarmersData);
+            }
+
+            document.getElementById('applyFilterBtn').addEventListener('click', applyFilters);
+            
+            document.getElementById('resetFilterBtn').addEventListener('click', () => {
+                document.getElementById('vcpFilter').value = 'all';
+                document.getElementById('buyerFilter').value = 'all';
+                document.getElementById('commodityFilter').value = 'all';
+                document.getElementById('paymentFilter').value = 'all';
+                document.getElementById('fromDateFilter').value = '';
+                document.getElementById('toDateFilter').value = '';
+                document.getElementById('districtFilter').value = 'all';
+                applyFilters();
+            });
+
+            populateFilters();
+            updateDashboard();
+        });
     </script>
 </body>
 </html>
